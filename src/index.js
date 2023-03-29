@@ -5,14 +5,24 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./pages/ErrorPage";
-import Products from "./pages/Products";
+import AllProducts from "./pages/AllProducts";
+import Home from "./pages/Home";
+import NewProduct from "./pages/NewProduct";
+import MyCart from "./pages/MyCart";
+import ProductDetail from "./pages/ProductDetail";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-    children: [{ index: true, element: <Products /> }],
+    children: [
+      { index: true, element: <Home /> },
+      { path: "/products", element: <AllProducts /> },
+      { path: "/products/new", element: <NewProduct /> },
+      { path: "/products/:id", element: <ProductDetail /> },
+      { path: "/carts", element: <MyCart /> },
+    ],
   },
 ]);
 
