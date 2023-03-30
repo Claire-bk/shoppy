@@ -3,20 +3,15 @@ import { Link } from "react-router-dom";
 import { AiOutlineShop } from "react-icons/ai";
 import { GrEdit } from "react-icons/gr";
 import { login, logout, onUserStateChange } from "../api/firebase";
+import User from "./User";
 
 export default function Navbar() {
   const [user, setUser] = useState();
 
-  const handleLogin = () => {
-    login().then(setUser);
-  };
-
-  const handleLogout = () => {
-    logout().then(setUser);
-  };
-
   useEffect(() => {
-    onUserStateChange(setUser(user));
+    onUserStateChange((user) => {
+      setUser(user);
+    });
   }, []);
 
   return (
@@ -28,12 +23,15 @@ export default function Navbar() {
         </Link>
         <nav className="flex items-center gap-4 font-semibold">
           <Link to="/products">Products</Link>
-          <Link to="/carts">Carts</Link>
-          <Link to="/products/new" className="text-2xl">
-            <GrEdit />
-          </Link>
-          {!user && <button onClick={handleLogin}>Login</button>}
-          {user && <button onClick={handleLogout}>Logout</button>}
+          {user && <Link to="/carts">Carts</Link>}
+          {user && user.isAdmin && (
+            <Link to="/products/new" className="text-2xl">
+              <GrEdit />
+            </Link>
+          )}
+          {user && <User user={user} />}
+          {!user && <button onClick={login}>Login</button>}
+          {user && <button onClick={logout}>Logout</button>}
         </nav>
       </header>
     </>
