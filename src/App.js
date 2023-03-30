@@ -1,13 +1,13 @@
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
+import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
 function App() {
   return (
     <>
-      <Header />
+      <Navbar />
       <QueryClientProvider client={queryClient}>
         <Outlet />
       </QueryClientProvider>
