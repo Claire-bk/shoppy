@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { AiOutlineShop } from "react-icons/ai";
 import { GrEdit } from "react-icons/gr";
-import { login, logout, onUserStateChange } from "../api/firebase";
 import User from "./User";
+import Button from "./ui/Button";
+import { useAuthContext } from "./context/AuthContext";
 
 export default function Navbar() {
-  const [user, setUser] = useState();
-
-  useEffect(() => {
-    onUserStateChange((user) => {
-      setUser(user);
-    });
-  }, []);
+  const { user, login, logout } = useAuthContext();
 
   return (
     <>
@@ -30,8 +25,8 @@ export default function Navbar() {
             </Link>
           )}
           {user && <User user={user} />}
-          {!user && <button onClick={login}>Login</button>}
-          {user && <button onClick={logout}>Logout</button>}
+          {!user && <Button text={"Login"} onClick={login} />}
+          {user && <Button text={"Logout"} onClick={logout} />}
         </nav>
       </header>
     </>
