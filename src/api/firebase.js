@@ -7,7 +7,7 @@ import {
   onAuthStateChanged,
   GoogleAuthProvider,
 } from "firebase/auth";
-import { getDatabase, ref, get, set } from "firebase/database";
+import { getDatabase, child, ref, get, set } from "firebase/database";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -51,6 +51,17 @@ async function adminUser(user) {
       }
 
       return user;
+    });
+}
+
+export async function getProducts() {
+  return get(ref(database, "products")) //
+    .then((snapshot) => {
+      if (snapshot.exists()) {
+        const data = snapshot.val();
+        return Object.values(data);
+      }
+      return [];
     });
 }
 
