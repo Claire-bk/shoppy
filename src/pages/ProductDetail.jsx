@@ -1,16 +1,24 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Button from "../components/ui/Button";
+import { addOrUpdateToCart } from "../api/firebase";
+import { useAuthContext } from "../context/AuthContext";
 
 export default function ProductDetail() {
+  const { uid } = useAuthContext();
   const {
     state: {
       product: { id, image, title, description, category, price, options },
     },
   } = useLocation();
   const [selected, setSelected] = useState(options && options[0]);
+  const [isAdded, setAdded] = useState(false);
   const handleSelect = (e) => setSelected(e.target.value);
-  const handleClick = (e) => {};
+  const handleClick = () => {
+    const product = { id, image, title, price, option: selected, quantity: 1 };
+    setAdded(true);
+    addOrUpdateToCart(uid, product);
+  };
 
   return (
     <>
@@ -26,9 +34,9 @@ export default function ProductDetail() {
           </p>
           <p className="py-4 text-lg">{description}</p>
           <div className="flex items-center">
-            <lable htmlFor="select" className="text-brand font-bold">
+            <label htmlFor="select" className="text-brand font-bold">
               option :
-            </lable>
+            </label>
             <select
               id="select"
               className="p-2 m-4 flex-1 border-2 border-dashed border-brand outline-none"
@@ -41,6 +49,11 @@ export default function ProductDetail() {
                 ))}
             </select>
           </div>
+          {isAdded && (
+            <p className="text-lg text-gray-700 mb-1">
+              ✅ This item is added in cart.
+            </p>
+          )}
           <Button text="Add to cart" onClick={handleClick} />
         </div>
       </section>

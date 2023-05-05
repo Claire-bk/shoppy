@@ -4,10 +4,12 @@ import { AiOutlineShop } from "react-icons/ai";
 import { GrEdit } from "react-icons/gr";
 import User from "./User";
 import Button from "./ui/Button";
-import { useAuthContext } from "./context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
+import { getCart } from "../api/firebase";
+import CartStatus from "./CartStatus";
 
 export default function Navbar() {
-  const { user, login, logout } = useAuthContext();
+  const { user, userId, login, logout } = useAuthContext();
 
   return (
     <>
@@ -18,7 +20,11 @@ export default function Navbar() {
         </Link>
         <nav className="flex items-center gap-4 font-semibold">
           <Link to="/products">Products</Link>
-          {user && <Link to="/carts">Carts</Link>}
+          {user && (
+            <Link to="/carts">
+              <CartStatus />
+            </Link>
+          )}
           {user && user.isAdmin && (
             <Link to="/products/new" className="text-2xl">
               <GrEdit />
