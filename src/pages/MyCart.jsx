@@ -1,27 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { FaEquals } from "react-icons/fa";
-import { getCart } from "../api/firebase";
 import CartItem from "../components/CartItem";
 import PriceCard from "../components/PriceCard";
 import Button from "../components/ui/Button";
-import { useAuthContext } from "../context/AuthContext";
+import useCart from "../hooks/useCart";
 
 const SHIPPING = 30;
 
 export default function MyCart() {
-  const { uid } = useAuthContext();
   const {
-    isLoading,
-    error,
-    data: products,
-  } = useQuery(["products"], () => getCart(uid));
+    cartQuery: { isLoading, data: products },
+  } = useCart();
 
   if (isLoading) return <p>Loading...</p>;
 
   const hasProducts = products && products.length > 0;
   const totalPrice =
+    hasProducts &&
     products &&
     products.reduce(
       (prev, current) => prev + parseInt(current.price) * current.quantity,
@@ -39,19 +35,19 @@ export default function MyCart() {
           <ul className="border-b border-gray-300 mb-8 p-4 px-8">
             {products &&
               products.map((product) => (
-                <CartItem key={product.id} product={product} uid={uid} />
+                <CartItem key={product.id} product={product} />
               ))}
           </ul>
+          <div className="flex justify-between items-center mb-6 px-2 md:px-8 lg:px-16">
+            <PriceCard text="Products Price" price={totalPrice} />
+            <BsFillPlusCircleFill className="shrink-0" />
+            <PriceCard text="Delivery Fee" price={SHIPPING} />
+            <FaEquals className="shrink-0" />
+            <PriceCard text="Total Price" price={totalPrice + SHIPPING} />
+          </div>
+          <Button text="Order" />
         </>
       )}
-      <div className="flex justify-between items-center mb-6 px-2 md:px-8 lg:px-16">
-        <PriceCard text="Products Price" price={totalPrice} />
-        <BsFillPlusCircleFill className="shrink-0" />
-        <PriceCard text="Delivery Fee" price={SHIPPING} />
-        <FaEquals className="shrink-0" />
-        <PriceCard text="Total Price" price={totalPrice + SHIPPING} />
-      </div>
-      <Button text="Order" />
     </section>
   );
 }
