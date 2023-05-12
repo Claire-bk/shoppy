@@ -5,11 +5,10 @@ import { GrEdit } from "react-icons/gr";
 import User from "./User";
 import Button from "./ui/Button";
 import { useAuthContext } from "../context/AuthContext";
-import { getCart } from "../api/firebase";
 import CartStatus from "./CartStatus";
 
 export default function Navbar() {
-  const { user, userId, login, logout } = useAuthContext();
+  const { user, login, logout } = useAuthContext();
 
   return (
     <>
